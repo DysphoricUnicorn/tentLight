@@ -3,7 +3,7 @@ TTY_PATH := /dev/ttyACM0
 RSHELL_OPTS := --quiet
 
 # MicroPython firmware
-MPY_FIRMWARE_FILENAME := esp32c3-usb-20220618-v1.19.1.bin
+MPY_FIRMWARE_FILENAME := esp32c3-20230426-v1.20.0.bin
 MPY_FIRMWARE_URL := https://micropython.org/resources/firmware/$(MPY_FIRMWARE_FILENAME)
 
 # Helper variables
@@ -25,7 +25,7 @@ install-venv:
 # Soft-reset (restart) the board
 .PHONY: reset-board
 reset-board:
-	$(ACTIVATE_VENV) && rshell $(RSHELL_OPTS) -p $(TTY_PATH) repl "~ import machine ~ machine.soft_reset() ~"
+	$(ACTIVATE_VENV) && rshell $(RSHELL_OPTS) -p $(TTY_PATH) repl "~ import machine ~ machine.soft_reset()"
 
 # Copy all .py files from src/ (the default app) to the board
 .PHONY: deploy
@@ -35,16 +35,6 @@ deploy:
 # Copy the default app from src/ to the board and restart the board (this will monitor the output of the code)
 .PHONY: run
 run: deploy reset-board
-
-# Copy custom source code from src_custom/ to the board
-.PHONY: deploy-custom
-deploy-custom:
-	@test -e src_custom/main.py || { echo "ERROR: Please create the file src_custom/main.py first."; exit 1; }
-	$(ACTIVATE_VENV) && rshell $(RSHELL_OPTS) -p $(TTY_PATH) cp "src_custom/*.py" /pyboard
-
-# Copy custom source code from src_custom/ to the board and restart the board (this will monitor the output of the code)
-.PHONY: run-custom
-run-custom: deploy-custom reset-board
 
 # -- Firmware flashing
 
