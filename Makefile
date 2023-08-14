@@ -25,12 +25,12 @@ install-venv:
 # Soft-reset (restart) the board
 .PHONY: reset-board
 reset-board:
-	$(ACTIVATE_VENV) && rshell $(RSHELL_OPTS) -p $(TTY_PATH) repl "~ import machine ~ machine.soft_reset()"
+	$(ACTIVATE_VENV) && rshell $(RSHELL_OPTS) -p $(TTY_PATH) repl "~ import machine ~ machine.soft_reset() ~"
 
 # Copy all .py files from src/ (the default app) to the board
 .PHONY: deploy
 deploy:
-	$(ACTIVATE_VENV) && rshell $(RSHELL_OPTS) -p $(TTY_PATH) cp "src/*.py" /pyboard
+	$(ACTIVATE_VENV) && rshell $(RSHELL_OPTS) -p $(TTY_PATH) cp -r "src/*" /pyboard
 
 # Copy the default app from src/ to the board and restart the board (this will monitor the output of the code)
 .PHONY: run
